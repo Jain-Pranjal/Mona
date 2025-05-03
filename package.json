@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "gameai.helloWorld",
-        "title": "Hello World"
+        "command": "gameai.improveCode",
+        "title": "Improve Code"
       }
     ]
   },
@@ -25,17 +25,34 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "dev": "npm run compile && ts-node src/server/dev.ts"
   },
   "devDependencies": {
-    "@types/vscode": "^1.99.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
     "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
+    "@types/node": "^20.17.32",
+    "@types/vscode": "^1.99.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.3",
+    "eslint": "^9.25.1",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@google/genai": "^0.12.0",
+    "@google/generative-ai": "^0.24.1",
+    "@types/node-fetch": "^2.6.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "lang-detector": "^1.0.6",
+    "node-fetch": "^2.7.0",
+    "openai": "^4.96.2"
   }
 }

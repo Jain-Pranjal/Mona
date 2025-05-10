@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import fetch from 'node-fetch';
 
 export function activate(context: vscode.ExtensionContext) {
-  vscode.window.showInformationMessage('AI Code Improvement extension is now active!');
+  vscode.window.showInformationMessage('Mona extension is now active!');
 
-  const disposable = vscode.commands.registerCommand('gameai.improveCode', async () => {
+  const disposable = vscode.commands.registerCommand('mona.improve', async () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
       vscode.window.showInformationMessage('No editor is active');
@@ -44,12 +44,12 @@ export function activate(context: vscode.ExtensionContext) {
 
           const { modifiedCode, explanation } = await response.json();
 
-          const panel = vscode.window.createWebviewPanel(
-            'aiImprovedCode',
-            'AI Improved Code',
+            const panel = vscode.window.createWebviewPanel(
+            'monaImprovedCode',
+            'Mona Improved Code',
             vscode.ViewColumn.Beside,
             { enableScripts: true }
-          );
+            );
 
           panel.webview.html = getWebviewContent(modifiedCode, explanation, editor.document.languageId);
 
@@ -91,51 +91,104 @@ function getWebviewContent(code: string, explanation: string, language: string):
       <title>AI Improved Code</title>
       <style>
         body {
-          font-family: sans-serif;
+          font-family: 'Fira Code', 'JetBrains Mono', monospace;
+          padding: 20px;
+          background-color: #f9f9f9;
+          color: #333;
+        }
+        h2 {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .tabs {
+          display: flex;
+          margin-bottom: 20px;
+          cursor: pointer;
+        }
+        .tab {
+          flex: 1;
+          text-align: center;
           padding: 10px;
+          background: #e0e0e0;
+          border-radius: 5px 5px 0 0;
+          margin-right: 2px;
+          font-weight: bold;
+        }
+        .tab.active {
+          background: #ffffff;
+          border-bottom: 2px solid #007acc;
+        }
+        .tab-content {
+          display: none;
+          background: #fff;
+          border-radius: 0 0 5px 5px;
+          padding: 20px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .tab-content.active {
+          display: block;
         }
         pre {
           background-color: #1e1e1e;
           color: #d4d4d4;
-          padding: 12px;
+          padding: 16px;
           overflow-x: auto;
-          border-radius: 5px;
+          border-radius: 10px;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         button {
+          display: block;
+          margin: 30px auto 0;
           background: #007acc;
           color: white;
           border: none;
-          padding: 8px 16px;
-          margin-top: 16px;
+          padding: 12px 24px;
+          font-size: 16px;
           cursor: pointer;
-          border-radius: 4px;
+          border-radius: 6px;
+          transition: background 0.3s;
         }
         button:hover {
           background: #005a9e;
         }
         .explanation {
-          margin-top: 20px;
-          background: #f3f3f3;
-          padding: 10px;
-          border-radius: 5px;
+          line-height: 1.6;
         }
       </style>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
       <script>hljs.highlightAll();</script>
     </head>
     <body>
-      <h2>AI-Improved Code</h2>
-      <pre><code class="${language}">${escapedCode}</code></pre>
-      <button onclick="applyChanges()">Apply Changes</button>
-      <div class="explanation">
-        <h3>Explanation</h3>
-        <p>${escapedExplanation}</p>
+      <h2>🚀 Mona Improved Code</h2>
+
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('codeTab')">Improved Code</div>
+        <div class="tab" onclick="showTab('explanationTab')">Explanation</div>
       </div>
+
+      <div id="codeTab" class="tab-content active">
+        <pre><code class="${language}">${escapedCode}</code></pre>
+        <button onclick="applyChanges()">✅ Apply Changes</button>
+      </div>
+
+      <div id="explanationTab" class="tab-content">
+        <div class="explanation">
+          <p>${escapedExplanation}</p>
+        </div>
+      </div>
+
       <script>
         const vscode = acquireVsCodeApi();
         function applyChanges() {
           vscode.postMessage({ command: 'applyChanges' });
+        }
+
+        function showTab(tabId) {
+          document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+          document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+          document.getElementById(tabId).classList.add('active');
+          event.target.classList.add('active');
         }
       </script>
     </body>

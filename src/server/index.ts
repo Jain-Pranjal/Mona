@@ -16,23 +16,25 @@ app.post('/ai-improve', async (req, res) => {
   const { code, prompt } = req.body;
 
   const fullPrompt = `
-"Analyze the following game development code snippet. Provide improvements focusing on:
+You are an elite coding assistant and code optimizer. Your role is to take the provided code and significantly improve it while preserving its original functionality.
 
-1.Performance Optimization: Enhance frame rates and reduce latency.
-2. Memory Management: Optimize resource loading and garbage collection.
-3. Code Readability: Refactor for clarity and maintainability.
-4. Best Practices: Align with industry standards for game development.
-5. Security: Identify and mitigate potential vulnerabilities.
-.
+- Apply modern best practices for the detected programming language.
+- Simplify logic, remove redundancy, and make performance optimizations.
+- Fix any potential bugs or bad practices.
+- Refactor variable, function, and class names to be more meaningful.
+- Modularize the code if appropriate, breaking large chunks into smaller, reusable pieces.
+- Use modern language features (e.g., async/await, arrow functions, optional chaining) when applicable.
+- Make the code cleaner, more readable, and maintainable according to standard conventions.
 
-Here is the code:
+Here is the code you must improve:
 ${code}
 
-The user request is:
+The user also requests:
 "${prompt}"
 
-Rewrite the code and explain what changed.
+Return the improved code first, and then list and explain what changes and improvements you made. Be detailed in the explanation.
 `;
+
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -41,11 +43,13 @@ Rewrite the code and explain what changed.
     const response = await result.response;
     const text = response.text();
 
-    // Extract code block
-    const match = text.match(/```(\w+)?\n([\s\S]+?)```/);
-    const modifiedCode = match ? match[2].trim() : '';
-    const explanation = text.split('Explanation:')[1]?.trim() || 'No explanation provided.';
-    // const language = langDetector(modifiedCode) || 'javascript';
+// Extract improved code block
+const codeMatch = text.match(/```[\s\S]*?\n([\s\S]*?)```/);
+const modifiedCode = codeMatch ? codeMatch[1].trim() : '';
+
+// Extract explanation (everything after the code block)
+const explanation = codeMatch ? text.split(codeMatch[0])[1]?.trim() || 'No explanation provided.': 'No explanation provided.';
+
 
     res.json({
       modifiedCode,

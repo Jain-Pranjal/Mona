@@ -1,7 +1,7 @@
 {
-  "name": "gameai",
-  "displayName": "gameai",
-  "description": "It will help the developer to write the code with the help of AI so that game developers can write the code more seemlessly",
+  "name": "mona",
+  "displayName": "Mona",
+  "description": "Mona is a VSCode extension that helps you improve your code by providing suggestions and examples.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.99.0"
@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "gameai.improveCode",
+        "command": "mona.improve",
         "title": "Improve Code"
       }
     ]

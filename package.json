@@ -17,6 +17,14 @@
         "command": "mona.improve",
         "title": "Improve Code"
       }
+    ],
+    "keybindings": [
+      {
+        "command": "mona.improve",
+        "key": "ctrl+shift+z",
+        "mac": "cmd+shift+z",
+        "when": "editorTextFocus"
+      }
     ]
   },
   "scripts": {
